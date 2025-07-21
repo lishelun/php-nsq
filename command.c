@@ -38,12 +38,12 @@ void nsq_ready(struct bufferevent *bev, int count) {
      // 调试输出
     bufferevent_write(bev, b, n);
     int res = bufferevent_flush(bev, EV_WRITE, BEV_FLUSH | BEV_FINISHED);
-    if (res != 0) {
-        fprintf(stderr, "NSQ ERROR: Failed to flush buffer (res=%d)\n", res);
-    }
-    fprintf(stderr, "NSQ DEBUG: Sending RDY command: %.*s", (int)n, b);
-    size_t pending = evbuffer_get_length(bufferevent_get_output(bev));
-    fprintf(stderr, "NSQ DEBUG: Output buffer pending: %zu bytes\n", pending);
+    // if (res != 0) {
+        // fprintf(stderr, "NSQ ERROR: Failed to flush buffer (res=%d)\n", res);
+    // }
+    // fprintf(stderr, "NSQ DEBUG: Sending RDY command: %.*s", (int)n, b);
+    // size_t pending = evbuffer_get_length(bufferevent_get_output(bev));
+    // fprintf(stderr, "NSQ DEBUG: Output buffer pending: %zu bytes\n", pending);
 
 
 }
