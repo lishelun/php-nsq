@@ -24,6 +24,7 @@ zend_class_entry *nsq_message_ce;
 
 extern int le_bufferevent;
 
+
 PHP_METHOD(NsqMessage,touch)
 {
     zval *bev_zval;
@@ -65,6 +66,33 @@ PHP_METHOD(NsqMessage,finish)
     nsq_finish(bev, Z_STRVAL_P(message_id));
 }
 
+// PHP_METHOD(NsqMessage, ready)
+// {
+//     zval *bev_zval;
+//     zend_long  count;
+//
+//     ZEND_PARSE_PARAMETERS_START(2, 2)
+//         Z_PARAM_RESOURCE(bev_zval)
+//         Z_PARAM_LONG(count)
+//     ZEND_PARSE_PARAMETERS_END();
+//
+//     struct bufferevent *bev = (struct bufferevent*)zend_fetch_resource(Z_RES_P(bev_zval), "buffer event", le_bufferevent);
+//     nsq_ready(bev, (int)count);
+// }
+
+PHP_METHOD(NsqMessage, ready)
+{
+    zval *bev_zval;
+    zval *count;
+
+    ZEND_PARSE_PARAMETERS_START(2, 2)
+        Z_PARAM_RESOURCE(bev_zval)
+        Z_PARAM_ZVAL(count)
+    ZEND_PARSE_PARAMETERS_END();
+
+    struct bufferevent *bev = (struct bufferevent*)zend_fetch_resource(Z_RES_P(bev_zval), "buffer event", le_bufferevent);
+    nsq_ready(bev, Z_LVAL_P(count));
+}
 ZEND_BEGIN_ARG_INFO_EX(arginfo_nsq_requeue, 0, 0, -1)
     ZEND_ARG_INFO(0, bev_zval)
     ZEND_ARG_INFO(0, message_id)
@@ -81,10 +109,17 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_nsq_finish, 0, 0, -1)
     ZEND_ARG_INFO(0, message_id)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_nsq_ready, 0, 0, -1)
+    ZEND_ARG_INFO(0, bev_zval)
+    ZEND_ARG_INFO(0, count)
+ZEND_END_ARG_INFO()
+
+
 static const zend_function_entry nsq_message_functions[] = {
     PHP_ME(NsqMessage, touch, arginfo_nsq_touch, ZEND_ACC_PUBLIC)
     PHP_ME(NsqMessage, requeue, arginfo_nsq_requeue, ZEND_ACC_PUBLIC)
     PHP_ME(NsqMessage, finish, arginfo_nsq_finish, ZEND_ACC_PUBLIC)
+    PHP_ME(NsqMessage, ready, arginfo_nsq_ready, ZEND_ACC_PUBLIC)
     PHP_FE_END	/* Must be the last line in nsq_functions[] */
 
 };

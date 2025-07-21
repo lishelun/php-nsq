@@ -196,7 +196,7 @@ void process_message_queue(evutil_socket_t fd, short events, void *arg) {
         free(msg);
         
         // Send RDY to prepare for next message
-        nsq_ready(bev, nsq_msg->rdy);
+        // nsq_ready(bev, nsq_msg->rdy);
     }
 }
 
